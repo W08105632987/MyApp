@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - MonieKing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  
+  <div class="auth-page">
+    <div class="auth-card slide-up">
+      <div class="auth-logo">
+        <h1 class="auth-title">💰 MonieKing</h1>
+        <p class="auth-subtitle">Welcome back! Please login to your account.</p>
+      </div>
+      
+      <form class="auth-form" id="loginForm">
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input 
+            type="email" 
+            class="form-input" 
+            placeholder="Enter your email" 
+            required
+            id="loginEmail"
+          >
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input 
+            type="password" 
+            class="form-input" 
+            placeholder="Enter your password" 
+            required
+            id="loginPassword"
+          >
+        </div>
+        
+        <div class="form-group" style="display: flex; justify-content: space-between; align-items: center;">
+          <label class="form-checkbox">
+            <input type="checkbox" id="rememberMe">
+            <span>Remember me</span>
+          </label>
+          <a href="#" style="font-size: 0.875rem; color: var(--primary-blue);">Forgot password?</a>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-block btn-lg">Login</button>
+      </form>
+      
+      <div class="auth-link">
+        Don't have an account? <a href="register.html">Create one</a>
+      </div>
+    </div>
+  </div>
+  
+  <script src="js/components.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      
+      if (!email || !password) {
+        showAlert('Please fill in all fields', 'error');
+        return;
+      }
+      
+      // Simulate login
+      showLoader();
+      
+      setTimeout(() => {
+        hideLoader();
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userEmail', email);
+        window.location.href = 'dashboard.html';
+      }, 1500);
+    });
+  </script>
+</body>
+</html>

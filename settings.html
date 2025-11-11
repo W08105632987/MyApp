@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - MonieKing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  
+  <div class="page">
+    <div class="page-header">
+      <div class="header-greeting">⚙️ Settings</div>
+      <div class="header-subtitle">Manage your account preferences</div>
+    </div>
+    
+    <div class="page-content">
+      <!-- Profile Section -->
+      <div class="card mb-lg">
+        <h3 class="mb-md">Profile Information</h3>
+        
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+          <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-blue), #0046CC); margin: 0 auto; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: bold;">
+            <span id="profileInitial">W</span>
+          </div>
+          <button class="btn btn-outline btn-sm mt-md">Change Photo</button>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-input" id="profileName" value="">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-input" id="profileEmail" value="" readonly style="background: #F8FAFC;">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-input" id="profilePhone" value="">
+        </div>
+        
+        <button class="btn btn-primary btn-block" onclick="saveProfile()">Save Changes</button>
+      </div>
+      
+      <!-- KYC Status -->
+      <div class="card mb-lg">
+        <h3 class="mb-md">Verification Status</h3>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #F8FAFC; border-radius: var(--radius-md);">
+          <div>
+            <div class="font-semibold mb-xs">KYC Verification</div>
+            <div class="text-muted text-sm">Identity verification status</div>
+          </div>
+          <span class="badge badge-warning" id="kycBadge">Pending</span>
+        </div>
+        
+        <button class="btn btn-outline btn-block mt-md" onclick="window.location.href='kyc.html'">
+          Update Documents
+        </button>
+      </div>
+      
+      <!-- Security -->
+      <div class="card mb-lg">
+        <h3 class="mb-md">Security</h3>
+        
+        <div class="settings-list">
+          <div class="settings-item" onclick="changePassword()">
+            <div class="settings-left">
+              <div class="settings-icon">🔒</div>
+              <div class="settings-info">
+                <h4>Change Password</h4>
+                <p>Update your account password</p>
+              </div>
+            </div>
+            <div style="font-size: 1.25rem; color: var(--text-muted);">→</div>
+          </div>
+          
+          <div class="settings-item" onclick="enableTwoFactor()">
+            <div class="settings-left">
+              <div class="settings-icon">🔐</div>
+              <div class="settings-info">
+                <h4>Two-Factor Authentication</h4>
+                <p>Add an extra layer of security</p>
+              </div>
+            </div>
+            <div style="font-size: 1.25rem; color: var(--text-muted);">→</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Notifications -->
+      <div class="card mb-lg">
+        <h3 class="mb-md">Notifications</h3>
+        
+        <div class="settings-list">
+          <div class="settings-item">
+            <div class="settings-left">
+              <div class="settings-icon">📧</div>
+              <div class="settings-info">
+                <h4>Email Notifications</h4>
+                <p>Receive updates via email</p>
+              </div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="emailNotif" checked onchange="toggleNotification('email')">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          
+          <div class="settings-item">
+            <div class="settings-left">
+              <div class="settings-icon">📱</div>
+              <div class="settings-info">
+                <h4>Push Notifications</h4>
+                <p>Get instant updates</p>
+              </div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="pushNotif" checked onchange="toggleNotification('push')">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          
+          <div class="settings-item">
+            <div class="settings-left">
+              <div class="settings-icon">💸</div>
+              <div class="settings-info">
+                <h4>Transaction Alerts</h4>
+                <p>Notify for all transactions</p>
+              </div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="txNotif" checked onchange="toggleNotification('transaction')">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Other Settings -->
+      <div class="card mb-lg">
+        <h3 class="mb-md">Preferences</h3>
+        
+        <div class="settings-list">
+          <div class="settings-item" onclick="showLanguage()">
+            <div class="settings-left">
+              <div class="settings-icon">🌐</div>
+              <div class="settings-info">
+                <h4>Language</h4>
+                <p>English (US)</p>
+              </div>
+            </div>
+            <div style="font-size: 1.25rem; color: var(--text-muted);">→</div>
+          </div>
+          
+          <div class="settings-item" onclick="showCurrency()">
+            <div class="settings-left">
+              <div class="settings-icon">💱</div>
+              <div class="settings-info">
+                <h4>Default Currency</h4>
+                <p>USD - US Dollar</p>
+              </div>
+            </div>
+            <div style="font-size: 1.25rem; color: var(--text-muted);">→</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Support -->
+      <div class="card mb-lg">
+        <h3 class="mb-md">Support & Legal</h3>
+        
+        <div class="settings-list">
+          <div class="settings-item" onclick="showHelp()">
+            <div class="settings-left">
+              <div class="settings-icon">❓</div>
+              <div class="settings-info">
+                <h4>Help Center</h4>
+                <p>Get help and support</p>
+              </div>
+            </div>
+            <div style="font-size: 1.25rem; color: var(--text-muted);">→</div>
+          </div>
+          
+          <div class="settings-item" onclick="showTerms()">
+            <div class="settings-left">
+              <div class="settings-icon">📄</div>
+              <div class="settings-info">
+                <h4>Terms & Conditions</h4>
+                <p>Read our terms</p>
+              </div>
+            </div>
+            <div style="font-size: 1.25rem; color: var(--text-muted);">→</div>
+          </div>
+          
+          <div class="settings-item" onclick="showPrivacy()">
+            <div class="settings-left">
+              <div class="settings-icon">🔒</div>
+              <div class="settings-info">
+                <h4>Privacy Policy</h4>
+                <p>How we protect your data</p>
+              </div>
+            </div>
+            <div style="font-size: 1.25rem; color: var(--text-muted);">→</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Logout Button -->
+      <button class="btn btn-outline btn-block btn-lg" onclick="logout()" style="color: var(--error); border-color: var(--error);">
+        🚪 Logout
+      </button>
+      
+      <div style="text-align: center; margin-top: 2rem; color: var(--text-muted); font-size: 0.875rem;">
+        <p>MonieKing v1.0.0</p>
+        <p>© 2025 All rights reserved</p>
+      </div>
+    </div>
+    
+    <div id="bottomNav"></div>
+  </div>
+  
+  <script src="js/mock-data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Check login
+    if (!localStorage.getItem('isLoggedIn')) {
+      window.location.href = 'login.html';
+    }
+    
+    // Load user data
+    const userName = localStorage.getItem('userName') || user.name;
+    const userEmail = localStorage.getItem('userEmail') || user.email;
+    const userPhone = localStorage.getItem('userPhone') || user.phone;
+    const kycStatus = localStorage.getItem('kycStatus') || 'pending';
+    
+    document.getElementById('profileName').value = userName;
+    document.getElementById('profileEmail').value = userEmail;
+    document.getElementById('profilePhone').value = userPhone;
+    document.getElementById('profileInitial').textContent = userName.charAt(0).toUpperCase();
+    
+    // Update KYC badge
+    const kycBadge = document.getElementById('kycBadge');
+    if (kycStatus === 'verified') {
+      kycBadge.textContent = 'Verified';
+      kycBadge.className = 'badge badge-success';
+    } else if (kycStatus === 'rejected') {
+      kycBadge.textContent = 'Rejected';
+      kycBadge.className = 'badge badge-error';
+    }
+    
+    // Save profile
+    function saveProfile() {
+      const name = document.getElementById('profileName').value;
+      const phone = document.getElementById('profilePhone').value;
+      
+      if (!name || !phone) {
+        showAlert('Please fill in all fields', 'error');
+        return;
+      }
+      
+      showLoader();
+      
+      setTimeout(() => {
+        hideLoader();
+        localStorage.setItem('userName', name);
+        localStorage.setItem('userPhone', phone);
+        showAlert('Profile updated successfully!', 'success');
+      }, 1000);
+    }
+    
+    // Change password
+    function changePassword() {
+      const content = `
+        <form id="changePasswordForm">
+          <div class="form-group">
+            <label class="form-label">Current Password</label>
+            <input type="password" class="form-input" id="currentPassword" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">New Password</label>
+            <input type="password" class="form-input" id="newPassword" minlength="8" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirm New Password</label>
+            <input type="password" class="form-input" id="confirmPassword" minlength="8" required>
+          </div>
+        </form>
+      `;
+      
+      showModal('Change Password', content, [
+        { text: 'Update Password', class: 'btn btn-primary', onClick: () => {
+          const newPass = document.getElementById('newPassword').value;
+          const confirmPass = document.getElementById('confirmPassword').value;
+          
+          if (newPass !== confirmPass) {
+            showAlert('Passwords do not match', 'error');
+            return;
+          }
+          
+          showAlert('Password updated successfully!', 'success');
+        }},
+        { text: 'Cancel', class: 'btn btn-outline' }
+      ]);
+    }
+    
+    // Enable 2FA
+    function enableTwoFactor() {
+      showAlert('Two-factor authentication setup coming soon!', 'info');
+    }
+    
+    // Toggle notification
+    function toggleNotification(type) {
+      const status = document.getElementById(`${type}Notif`).checked ? 'enabled' : 'disabled';
+      showAlert(`${type.charAt(0).toUpperCase() + type.slice(1)} notifications ${status}`, 'success');
+    }
+    
+    // Show language selector
+    function showLanguage() {
+      showAlert('Language settings coming soon!', 'info');
+    }
+    
+    // Show currency selector
+    function showCurrency() {
+      showAlert('Currency settings coming soon!', 'info');
+    }
+    
+    // Show help
+    function showHelp() {
+      showAlert('Opening help center...', 'info');
+    }
+    
+    // Show terms
+    function showTerms() {
+      showAlert('Opening terms and conditions...', 'info');
+    }
+    
+    // Show privacy
+    function showPrivacy() {
+      showAlert('Opening privacy policy...', 'info');
+    }
+    
+    // Logout
+    function logout() {
+      const content = `
+        <div style="text-align: center;">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">👋</div>
+          <h3>Logout</h3>
+          <p class="text-muted mt-sm">Are you sure you want to logout?</p>
+        </div>
+      `;
+      
+      showModal('Confirm Logout', content, [
+        { text: 'Yes, Logout', class: 'btn btn-primary', onClick: () => {
+          localStorage.clear();
+          window.location.href = 'index.html';
+        }},
+        { text: 'Cancel', class: 'btn btn-outline' }
+      ]);
+    }
+    
+    // Load bottom nav
+    document.getElementById('bottomNav').innerHTML = createBottomNav('settings');
+  </script>
+</body>
+</html>

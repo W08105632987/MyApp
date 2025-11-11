@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receive Money - MonieKing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  
+  <div class="page">
+    <div class="page-header">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="dashboard.html" style="font-size: 1.5rem;">←</a>
+        <div>
+          <div class="header-greeting">Receive Money</div>
+          <div class="header-subtitle">Share your payment details</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="page-content">
+      <!-- Account Details Card -->
+      <div class="card mb-lg">
+        <h3 class="mb-md">Your MonieKing Account</h3>
+        
+        <div style="background: #F8FAFC; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #E2E8F0;">
+            <span class="text-muted text-sm">Account Name</span>
+            <span class="font-semibold" id="accountName">-</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #E2E8F0;">
+            <span class="text-muted text-sm">Account Number</span>
+            <span class="font-semibold">MK-2025-7890</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #E2E8F0;">
+            <span class="text-muted text-sm">SWIFT/BIC</span>
+            <span class="font-semibold">MNIEXXXX</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span class="text-muted text-sm">IBAN</span>
+            <span class="font-semibold">GB29 MNIE 6016 1331 9268 19</span>
+          </div>
+        </div>
+        
+        <button class="btn btn-outline btn-block" onclick="copyAccountDetails()">
+          📋 Copy Account Details
+        </button>
+      </div>
+      
+      <!-- Payment Link -->
+      <div class="card mb-lg">
+        <h3 class="mb-md">Payment Link</h3>
+        <p class="text-muted text-sm mb-md">Generate a payment link to share with anyone</p>
+        
+        <div class="form-group">
+          <label class="form-label">Amount (Optional)</label>
+          <div style="display: flex; gap: 0.5rem;">
+            <input type="number" class="form-input" placeholder="0.00" id="linkAmount" step="0.01" min="0">
+            <select class="form-select" id="linkCurrency" style="max-width: 120px;">
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+              <option value="GBP">GBP</option>
+              <option value="NGN">NGN</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Description (Optional)</label>
+          <input type="text" class="form-input" placeholder="e.g., Payment for services" id="linkDescription">
+        </div>
+        
+        <button class="btn btn-primary btn-block" onclick="generatePaymentLink()">
+          🔗 Generate Payment Link
+        </button>
+        
+        <div id="generatedLink" class="hidden" style="margin-top: 1rem; padding: 1rem; background: #F8FAFC; border-radius: var(--radius-md);">
+          <label class="form-label">Your Payment Link</label>
+          <div style="display: flex; gap: 0.5rem;">
+            <input type="text" class="form-input" id="paymentLinkText" readonly>
+            <button class="btn btn-primary" onclick="copyPaymentLink()">Copy</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- QR Code -->
+      <div class="card mb-lg">
+        <h3 class="mb-md">QR Code</h3>
+        <p class="text-muted text-sm mb-md">Share this QR code for quick payments</p>
+        
+        <div id="qrCodeContainer" class="hidden">
+          <div id="qrCode" style="margin-bottom: 1rem;"></div>
+          <button class="btn btn-outline btn-block" onclick="downloadQR()">
+            💾 Download QR Code
+          </button>
+        </div>
+        
+        <button class="btn btn-primary btn-block" id="showQRBtn" onclick="showQRCode()">
+          📱 Show QR Code
+        </button>
+      </div>
+      
+      <!-- Supported Currencies -->
+      <div class="card">
+        <h3 class="mb-md">Supported Currencies</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <span class="badge badge-primary">USD</span>
+          <span class="badge badge-primary">EUR</span>
+          <span class="badge badge-primary">GBP</span>
+          <span class="badge badge-primary">NGN</span>
+          <span class="badge badge-primary">CAD</span>
+          <span class="badge badge-primary">AUD</span>
+        </div>
+      </div>
+    </div>
+    
+    <div id="bottomNav"></div>
+  </div>
+  
+  <script src="js/mock-data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Check login
+    if (!localStorage.getItem('isLoggedIn')) {
+      window.location.href = 'login.html';
+    }
+    
+    // Load account name
+    const userName = localStorage.getItem('userName') || user.name;
+    document.getElementById('accountName').textContent = userName;
+    
+    // Copy account details
+    function copyAccountDetails() {
+      const details = `
+MonieKing Account Details
+Account Name: ${userName}
+Account Number: MK-2025-7890
+SWIFT/BIC: MNIEXXXX
+IBAN: GB29 MNIE 6016 1331 9268 19
+      `.trim();
+      
+      copyToClipboard(details, 'Account details copied!');
+    }
+    
+    // Generate payment link
+    function generatePaymentLink() {
+      const amount = document.getElementById('linkAmount').value;
+      const currency = document.getElementById('linkCurrency').value;
+      const description = document.getElementById('linkDescription').value;
+      
+      let link = `https://monieking.com/pay/${userName.replace(/\s+/g, '-').toLowerCase()}`;
+      
+      if (amount) {
+        link += `?amount=${amount}&currency=${currency}`;
+      }
+      
+      if (description) {
+        link += amount ? '&' : '?';
+        link += `desc=${encodeURIComponent(description)}`;
+      }
+      
+      document.getElementById('paymentLinkText').value = link;
+      document.getElementById('generatedLink').classList.remove('hidden');
+      
+      showAlert('Payment link generated!', 'success');
+    }
+    
+    // Copy payment link
+    function copyPaymentLink() {
+      const link = document.getElementById('paymentLinkText').value;
+      copyToClipboard(link, 'Payment link copied!');
+    }
+    
+    // Show QR code
+    function showQRCode() {
+      const qrData = `monieking://pay/${userName.replace(/\s+/g, '-').toLowerCase()}`;
+      document.getElementById('qrCode').innerHTML = generateQRCode(qrData);
+      document.getElementById('qrCodeContainer').classList.remove('hidden');
+      document.getElementById('showQRBtn').classList.add('hidden');
+    }
+    
+    // Download QR code
+    function downloadQR() {
+      showAlert('QR Code download started!', 'success');
+    }
+    
+    // Load bottom nav
+    document.getElementById('bottomNav').innerHTML = createBottomNav('dashboard');
+  </script>
+</body>
+</html>

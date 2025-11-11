@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop - MonieKing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  
+  <div class="page">
+    <div class="page-header">
+      <div class="header-greeting">🛍️ Shop</div>
+      <div class="header-subtitle">Buy products with your MonieKing balance</div>
+    </div>
+    
+    <div class="page-content">
+      <!-- Search Bar -->
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" placeholder="Search products..." id="searchInput" oninput="filterProducts()">
+      </div>
+      
+      <!-- Filters -->
+      <div class="filter-group">
+        <button class="filter-btn active" data-category="all" onclick="filterByCategory('all')">All</button>
+        <button class="filter-btn" data-category="Electronics" onclick="filterByCategory('Electronics')">Electronics</button>
+        <button class="filter-btn" data-category="Audio" onclick="filterByCategory('Audio')">Audio</button>
+        <button class="filter-btn" data-category="Computers" onclick="filterByCategory('Computers')">Computers</button>
+      </div>
+      
+      <!-- Products Grid -->
+      <div class="product-grid" id="productGrid">
+        <!-- Products will be loaded here -->
+      </div>
+      
+      <!-- Empty State -->
+      <div id="emptyState" class="hidden" style="text-align: center; padding: 3rem 1rem;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">📦</div>
+        <h3>No products found</h3>
+        <p class="text-muted">Try adjusting your search or filters</p>
+      </div>
+    </div>
+    
+    <div id="bottomNav"></div>
+  </div>
+  
+  <script src="js/mock-data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Check login
+    if (!localStorage.getItem('isLoggedIn')) {
+      window.location.href = 'login.html';
+    }
+    
+    let currentCategory = 'all';
+    let searchQuery = '';
+    
+    // Load products
+    function loadProducts() {
+      let filteredProducts = products;
+      
+      // Filter by category
+      if (currentCategory !== 'all') {
+        filteredProducts = filteredProducts.filter(p => p.category === currentCategory);
+      }
+      
+      // Filter by search
+      if (searchQuery) {
+        filteredProducts = filteredProducts.filter(p => 
+          p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          p.brand.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+      
+      const grid = document.getElementById('productGrid');
+      const emptyState = document.getElementById('emptyState');
+      
+      if (filteredProducts.length === 0) {
+        grid.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      
+      grid.classList.remove('hidden');
+      emptyState.classList.add('hidden');
+      grid.innerHTML = filteredProducts.map(product => createProductCard(product)).join('');
+    }
+    
+    // Filter by category
+    function filterByCategory(category) {
+      currentCategory = category;
+      
+      // Update active button
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.category === category) {
+          btn.classList.add('active');
+        }
+      });
+      
+      loadProducts();
+    }
+    
+    // Filter products by search
+    function filterProducts() {
+      searchQuery = document.getElementById('searchInput').value;
+      loadProducts();
+    }
+    
+    // Show product details
+    window.showProductDetails = function(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+      
+      const content = `
+        <div style="text-align: center;">
+          <div style="width: 200px; height: 200px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem; font-weight: bold;">
+            ${product.brand.charAt(0)}
+          </div>
+          <h3 class="mb-sm">${product.name}</h3>
+          <div class="badge badge-primary mb-md">${product.brand}</div>
+          <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue); margin: 1rem 0;">
+            ${formatCurrency(product.price, product.currency)}
+          </div>
+          <div class="card" style="text-align: left; margin-top: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+              <span class="text-muted">Category:</span>
+              <span class="font-semibold">${product.category}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span class="text-muted">Availability:</span>
+              <span class="${product.inStock ? 'text-primary' : 'text-muted'} font-semibold">
+                ${product.inStock ? '✓ In Stock' : '✕ Out of Stock'}
+              </span>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      showModal('Product Details', content, [
+        { text: 'Buy Now', class: 'btn btn-primary', onClick: () => addToCart(productId) },
+        { text: 'Close', class: 'btn btn-outline' }
+      ]);
+    };
+    
+    // Add to cart / Buy now
+    window.addToCart = function(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+      
+      if (!product.inStock) {
+        showAlert('This product is currently out of stock', 'error');
+        return;
+      }
+      
+      // Close any open modal first
+      closeModal();
+      
+      showLoader();
+      
+      setTimeout(() => {
+        hideLoader();
+        
+        const content = `
+          <div style="text-align: center;">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">🛒</div>
+            <h3 class="mb-md">Checkout</h3>
+            <div class="card" style="text-align: left;">
+              <h4 class="mb-sm">${product.name}</h4>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #E2E8F0;">
+                <span class="text-muted">Price:</span>
+                <span class="font-bold">${formatCurrency(product.price, product.currency)}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #E2E8F0;">
+                <span class="text-muted">Shipping:</span>
+                <span class="font-bold">FREE</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span class="font-semibold">Total:</span>
+                <span class="font-bold text-primary" style="font-size: 1.25rem;">${formatCurrency(product.price, product.currency)}</span>
+              </div>
+            </div>
+            <div class="alert alert-info mt-md" style="text-align: left;">
+              <span>💳</span>
+              <span>Payment will be deducted from your ${product.currency} wallet</span>
+            </div>
+          </div>
+        `;
+        
+        showModal('Complete Purchase', content, [
+          { text: 'Confirm Purchase', class: 'btn btn-primary', onClick: () => completePurchase(product) },
+          { text: 'Cancel', class: 'btn btn-outline' }
+        ]);
+      }, 1000);
+    };
+    
+    // Complete purchase
+    function completePurchase(product) {
+      showLoader();
+      
+      setTimeout(() => {
+        hideLoader();
+        showSuccessModal(
+          'Purchase Successful!',
+          `You've successfully purchased ${product.name} for ${formatCurrency(product.price, product.currency)}. Your order will be delivered soon!`,
+          () => {}
+        );
+      }, 1500);
+    }
+    
+    // Initialize
+    loadProducts();
+    
+    // Load bottom nav
+    document.getElementById('bottomNav').innerHTML = createBottomNav('shop');
+  </script>
+</body>
+</html>

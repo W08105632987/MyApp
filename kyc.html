@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verification - MonieKing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  
+  <div class="page">
+    <div class="page-content">
+      <div class="card slide-up">
+        <div style="text-align: center; margin-bottom: 2rem;">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">🔐</div>
+          <h1 style="font-size: 1.75rem; margin-bottom: 0.5rem;">Verify Your Identity</h1>
+          <p class="text-muted">We need to verify your identity to keep your account secure.</p>
+        </div>
+        
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        
+        <form id="kycForm">
+          <div class="form-group">
+            <label class="form-label">Upload ID Document</label>
+            <div class="upload-box" id="idUpload" onclick="document.getElementById('idFile').click()">
+              <div class="upload-icon">📄</div>
+              <div class="upload-text">Click to upload your ID card or passport</div>
+              <input type="file" id="idFile" style="display: none;" accept="image/*" onchange="handleFileUpload(this, 'idUpload')">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Upload Passport Photo</label>
+            <div class="upload-box" id="passportUpload" onclick="document.getElementById('passportFile').click()">
+              <div class="upload-icon">📸</div>
+              <div class="upload-text">Click to upload your passport photo</div>
+              <input type="file" id="passportFile" style="display: none;" accept="image/*" onchange="handleFileUpload(this, 'passportUpload')">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Take a Selfie</label>
+            <div class="upload-box" id="selfieUpload" onclick="document.getElementById('selfieFile').click()">
+              <div class="upload-icon">🤳</div>
+              <div class="upload-text">Click to take or upload a selfie</div>
+              <input type="file" id="selfieFile" style="display: none;" accept="image/*" onchange="handleFileUpload(this, 'selfieUpload')">
+            </div>
+          </div>
+          
+          <button type="submit" class="btn btn-primary btn-block btn-lg mt-lg">Continue</button>
+          <button type="button" class="btn btn-outline btn-block mt-md" onclick="skipKYC()">Skip for now</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <script src="js/components.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let uploadedFiles = {
+      id: false,
+      passport: false,
+      selfie: false
+    };
+    
+    function handleFileUpload(input, boxId) {
+      if (input.files && input.files[0]) {
+        const box = document.getElementById(boxId);
+        box.classList.add('active');
+        box.querySelector('.upload-text').textContent = '✓ ' + input.files[0].name;
+        
+        // Mark as uploaded
+        if (boxId === 'idUpload') uploadedFiles.id = true;
+        if (boxId === 'passportUpload') uploadedFiles.passport = true;
+        if (boxId === 'selfieUpload') uploadedFiles.selfie = true;
+        
+        updateProgress();
+      }
+    }
+    
+    function updateProgress() {
+      const total = Object.values(uploadedFiles).filter(v => v).length;
+      const percentage = (total / 3) * 100;
+      document.getElementById('progressFill').style.width = percentage + '%';
+    }
+    
+    document.getElementById('kycForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      if (!uploadedFiles.id || !uploadedFiles.passport || !uploadedFiles.selfie) {
+        showAlert('Please upload all required documents', 'warning');
+        return;
+      }
+      
+      // Simulate verification
+      showLoader();
+      
+      setTimeout(() => {
+        hideLoader();
+        showSuccessModal(
+          'Verification Submitted!',
+          'Your documents have been submitted for verification. We\'ll notify you once approved.',
+          () => {
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('kycStatus', 'pending');
+            window.location.href = 'dashboard.html';
+          }
+        );
+      }, 2000);
+    });
+    
+    function skipKYC() {
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('kycStatus', 'pending');
+      window.location.href = 'dashboard.html';
+    }
+  </script>
+</body>
+</html>

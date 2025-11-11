@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Send Money - MonieKing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  
+  <div class="page">
+    <div class="page-header">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="dashboard.html" style="font-size: 1.5rem;">←</a>
+        <div>
+          <div class="header-greeting">Send Money</div>
+          <div class="header-subtitle">Transfer funds globally</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="page-content">
+      <form id="sendMoneyForm">
+        <!-- Source Wallet -->
+        <div class="card mb-lg">
+          <h3 class="mb-md">From Wallet</h3>
+          <div class="form-group">
+            <label class="form-label">Select Wallet</label>
+            <select class="form-select" id="sourceWallet" required onchange="updateSourceBalance()">
+              <option value="">Choose wallet...</option>
+            </select>
+            <div style="margin-top: 0.5rem; font-size: 0.875rem; color: var(--text-muted);">
+              Available: <span id="availableBalance" class="font-semibold">$0.00</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Recipient Details -->
+        <div class="card mb-lg">
+          <h3 class="mb-md">Recipient Details</h3>
+          
+          <div class="form-group">
+            <label class="form-label">Recipient Name</label>
+            <input type="text" class="form-input" placeholder="Enter recipient name" required id="recipientName">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Country</label>
+            <select class="form-select" id="recipientCountry" required>
+              <option value="">Select country...</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Bank</label>
+            <select class="form-select" id="recipientBank" required>
+              <option value="">Select bank...</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Account Number / IBAN</label>
+            <input type="text" class="form-input" placeholder="Enter account number" required id="accountNumber">
+          </div>
+        </div>
+        
+        <!-- Amount -->
+        <div class="card mb-lg">
+          <h3 class="mb-md">Amount</h3>
+          
+          <div class="form-group">
+            <label class="form-label">You Send</label>
+            <div style="display: flex; gap: 0.5rem;">
+              <input type="number" class="form-input" placeholder="0.00" required id="sendAmount" step="0.01" min="0.01" oninput="calculateRate()">
+              <select class="form-select" id="sendCurrency" style="max-width: 120px;" onchange="calculateRate()">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="NGN">NGN</option>
+              </select>
+            </div>
+          </div>
+          
+          <div id="rateDisplay" class="hidden">
+            <button type="button" class="btn btn-outline btn-sm w-full mb-md" onclick="calculateRate()">
+              🔄 Refresh Rate
+            </button>
+            
+            <div class="rate-card">
+              <div class="rate-row">
+                <span class="rate-label">Exchange Rate</span>
+                <span class="rate-value" id="exchangeRate">-</span>
+              </div>
+              <div class="rate-row">
+                <span class="rate-label">Transfer Fee</span>
+                <span class="rate-value" id="transferFee">-</span>
+              </div>
+              <div class="rate-row">
+                <span class="rate-label">You'll be charged</span>
+                <span class="rate-value font-bold" id="totalCharge">-</span>
+              </div>
+              <div class="rate-row" style="border-top: 2px solid #CBD5E1; padding-top: 0.75rem; margin-top: 0.75rem;">
+                <span class="rate-label font-semibold">Recipient Gets</span>
+                <span class="rate-value font-bold text-primary" id="recipientGets" style="font-size: 1.125rem;">-</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-block btn-lg">Confirm Transfer</button>
+        <a href="dashboard.html" class="btn btn-outline btn-block mt-md">Cancel</a>
+      </form>
+    </div>
+    
+    <div id="bottomNav"></div>
+  </div>
+  
+  <script src="js/mock-data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Check login
+    if (!localStorage.getItem('isLoggedIn')) {
+      window.location.href = 'login.html';
+    }
+    
+    // Load wallets
+    const sourceWallet = document.getElementById('sourceWallet');
+    user.wallets.forEach(wallet => {
+      const option = document.createElement('option');
+      option.value = wallet.currency;
+      option.textContent = `${wallet.currency} - ${formatCurrency(wallet.balance, wallet.currency)}`;
+      option.dataset.balance = wallet.balance;
+      sourceWallet.appendChild(option);
+    });
+    
+    // Load countries
+    const countrySelect = document.getElementById('recipientCountry');
+    countries.forEach(country => {
+      const option = document.createElement('option');
+      option.value = country.code;
+      option.textContent = country.name;
+      countrySelect.appendChild(option);
+    });
+    
+    // Load banks
+    const bankSelect = document.getElementById('recipientBank');
+    banks.forEach(bank => {
+      const option = document.createElement('option');
+      option.value = bank;
+      option.textContent = bank;
+      bankSelect.appendChild(option);
+    });
+    
+    // Update source balance
+    function updateSourceBalance() {
+      const selected = sourceWallet.options[sourceWallet.selectedIndex];
+      if (selected && selected.value) {
+        const balance = selected.dataset.balance;
+        const currency = selected.value;
+        document.getElementById('availableBalance').textContent = formatCurrency(parseFloat(balance), currency);
+      }
+    }
+    
+    // Calculate rate
+    function calculateRate() {
+      const amount = parseFloat(document.getElementById('sendAmount').value);
+      const currency = document.getElementById('sendCurrency').value;
+      
+      if (!amount || amount <= 0) {
+        document.getElementById('rateDisplay').classList.add('hidden');
+        return;
+      }
+      
+      document.getElementById('rateDisplay').classList.remove('hidden');
+      
+      // Mock rate calculation
+      const rate = getConversionRate(currency, 'USD');
+      const fee = calculateFee(amount);
+      const total = amount + fee;
+      const recipientAmount = amount * rate;
+      
+      document.getElementById('exchangeRate').textContent = `1 ${currency} = ${rate.toFixed(4)} USD`;
+      document.getElementById('transferFee').textContent = formatCurrency(fee, currency);
+      document.getElementById('totalCharge').textContent = formatCurrency(total, currency);
+      document.getElementById('recipientGets').textContent = formatCurrency(recipientAmount, 'USD');
+    }
+    
+    // Form submission
+    document.getElementById('sendMoneyForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const wallet = document.getElementById('sourceWallet').value;
+      const name = document.getElementById('recipientName').value;
+      const country = document.getElementById('recipientCountry').value;
+      const bank = document.getElementById('recipientBank').value;
+      const account = document.getElementById('accountNumber').value;
+      const amount = document.getElementById('sendAmount').value;
+      
+      if (!wallet || !name || !country || !bank || !account || !amount) {
+        showAlert('Please fill in all fields', 'error');
+        return;
+      }
+      
+      showLoader();
+      
+      setTimeout(() => {
+        hideLoader();
+        showSuccessModal(
+          'Transfer Successful!',
+          `You've successfully sent ${formatCurrency(parseFloat(amount), document.getElementById('sendCurrency').value)} to ${name}`,
+          () => window.location.href = 'dashboard.html'
+        );
+      }, 2000);
+    });
+    
+    // Load bottom nav
+    document.getElementById('bottomNav').innerHTML = createBottomNav('dashboard');
+  </script>
+</body>
+</html>

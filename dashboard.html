@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - MonieKing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  
+  <div class="page">
+    <div class="page-header">
+      <div class="header-greeting">Welcome, <span id="userName">User</span> 👋</div>
+      <div class="header-subtitle">Here's your financial overview</div>
+    </div>
+    
+    <div class="page-content">
+      <!-- Balance Card -->
+      <div class="balance-card">
+        <div class="balance-label">Total Balance (USD Equivalent)</div>
+        <div class="balance-amount" id="totalBalance">$0.00</div>
+        <div class="balance-change">
+          <span style="color: rgba(255,255,255,0.9);">↑ +2.5% from last month</span>
+        </div>
+      </div>
+      
+      <!-- Wallets Grid -->
+      <div style="margin-bottom: var(--spacing-lg);">
+        <h3 style="margin-bottom: var(--spacing-md);">My Wallets</h3>
+        <div class="wallet-grid" id="walletGrid">
+          <!-- Wallets will be loaded here -->
+        </div>
+      </div>
+      
+      <!-- Quick Actions -->
+      <div style="margin-bottom: var(--spacing-xl);">
+        <h3 style="margin-bottom: var(--spacing-md);">Quick Actions</h3>
+        <div class="quick-actions">
+          <a href="#" onclick="showAlert('Coming soon!', 'info'); return false;" class="action-btn">
+            <div class="action-icon">💰</div>
+            <div class="action-label">Add Money</div>
+          </a>
+          <a href="send-money.html" class="action-btn">
+            <div class="action-icon">📤</div>
+            <div class="action-label">Send</div>
+          </a>
+          <a href="receive-money.html" class="action-btn">
+            <div class="action-icon">📥</div>
+            <div class="action-label">Receive</div>
+          </a>
+          <a href="convert.html" class="action-btn">
+            <div class="action-icon">🔄</div>
+            <div class="action-label">Convert</div>
+          </a>
+          <a href="shop.html" class="action-btn">
+            <div class="action-icon">🛍️</div>
+            <div class="action-label">Shop</div>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Recent Transactions -->
+      <div style="margin-bottom: var(--spacing-xl);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
+          <h3>Recent Transactions</h3>
+          <a href="transactions.html" style="font-size: 0.875rem; color: var(--primary-blue); font-weight: 600;">View All →</a>
+        </div>
+        
+        <div class="transaction-list" id="recentTransactions">
+          <!-- Transactions will be loaded here -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <div id="bottomNav"></div>
+  </div>
+  
+  <script src="js/mock-data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Check if user is logged in
+    if (!localStorage.getItem('isLoggedIn')) {
+      window.location.href = 'login.html';
+    }
+    
+    // Load user data
+    const userName = localStorage.getItem('userName') || user.name;
+    document.getElementById('userName').textContent = userName.split(' ')[0];
+    
+    // Load total balance
+    document.getElementById('totalBalance').textContent = formatCurrency(user.totalBalanceUSD, 'USD');
+    
+    // Load wallets
+    const walletGrid = document.getElementById('walletGrid');
+    walletGrid.innerHTML = user.wallets.map(wallet => createWalletCard(wallet)).join('');
+    
+    // Load recent transactions (last 5)
+    const recentTransactions = document.getElementById('recentTransactions');
+    const transactions = user.transactions.slice(0, 5);
+    recentTransactions.innerHTML = transactions.map(tx => createTransactionItem(tx)).join('');
+    
+    // Load bottom navigation
+    document.getElementById('bottomNav').innerHTML = createBottomNav('dashboard');
+    
+    // Transaction details modal
+    window.showTransactionDetails = function(id) {
+      const transaction = user.transactions.find(tx => tx.id === id);
+      if (!transaction) return;
+      
+      const content = `
+        <div style="text-align: center;">
+          <div class="transaction-icon ${transaction.type.toLowerCase()}" style="width: 60px; height: 60px; font-size: 2rem; margin: 0 auto 1rem;">
+            ${getTransactionIcon(transaction.type)}
+          </div>
+          <h3>${transaction.type}</h3>
+          <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue); margin: 1rem 0;">
+            ${formatCurrency(transaction.amount, transaction.currency)}
+          </div>
+          <div class="card" style="text-align: left; margin-top: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+              <span class="text-muted">Status:</span>
+              <span class="transaction-status ${transaction.status.toLowerCase()}">${transaction.status}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+              <span class="text-muted">Date:</span>
+              <span class="font-semibold">${formatDate(transaction.date)}</span>
+            </div>
+            ${transaction.recipient ? `
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+                <span class="text-muted">Recipient:</span>
+                <span class="font-semibold">${transaction.recipient}</span>
+              </div>
+            ` : ''}
+            ${transaction.sender ? `
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+                <span class="text-muted">Sender:</span>
+                <span class="font-semibold">${transaction.sender}</span>
+              </div>
+            ` : ''}
+            <div style="display: flex; justify-content: space-between;">
+              <span class="text-muted">Description:</span>
+              <span class="font-semibold">${transaction.description}</span>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      showModal('Transaction Details', content, [
+        { text: 'Close', class: 'btn btn-outline' }
+      ]);
+    };
+  </script>
+</body>
+</html>

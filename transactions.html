@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transactions - MonieKing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  
+  <div class="page">
+    <div class="page-header">
+      <div class="header-greeting">📊 Transactions</div>
+      <div class="header-subtitle">View all your transaction history</div>
+    </div>
+    
+    <div class="page-content">
+      <!-- Summary Cards -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-sm); margin-bottom: var(--spacing-lg);">
+        <div class="card p-sm" style="text-align: center;">
+          <div class="text-muted text-xs mb-xs">Total</div>
+          <div class="font-bold text-lg" id="totalCount">0</div>
+        </div>
+        <div class="card p-sm" style="text-align: center; background: #D1FAE5;">
+          <div class="text-muted text-xs mb-xs">Completed</div>
+          <div class="font-bold text-lg" style="color: var(--success);" id="completedCount">0</div>
+        </div>
+        <div class="card p-sm" style="text-align: center; background: #FEF3C7;">
+          <div class="text-muted text-xs mb-xs">Pending</div>
+          <div class="font-bold text-lg" style="color: var(--warning);" id="pendingCount">0</div>
+        </div>
+      </div>
+      
+      <!-- Filters -->
+      <div style="margin-bottom: var(--spacing-lg);">
+        <label class="form-label">Filter by Type</label>
+        <div class="filter-group">
+          <button class="filter-btn active" data-type="all" onclick="filterByType('all')">All</button>
+          <button class="filter-btn" data-type="Send" onclick="filterByType('Send')">Send</button>
+          <button class="filter-btn" data-type="Receive" onclick="filterByType('Receive')">Receive</button>
+          <button class="filter-btn" data-type="Convert" onclick="filterByType('Convert')">Convert</button>
+        </div>
+      </div>
+      
+      <div style="margin-bottom: var(--spacing-lg);">
+        <label class="form-label">Filter by Status</label>
+        <div class="filter-group">
+          <button class="filter-btn active" data-status="all" onclick="filterByStatus('all')">All</button>
+          <button class="filter-btn" data-status="Completed" onclick="filterByStatus('Completed')">Completed</button>
+          <button class="filter-btn" data-status="Pending" onclick="filterByStatus('Pending')">Pending</button>
+          <button class="filter-btn" data-status="Failed" onclick="filterByStatus('Failed')">Failed</button>
+        </div>
+      </div>
+      
+      <!-- Transactions List -->
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
+          <h3>All Transactions</h3>
+          <button class="btn btn-outline btn-sm" onclick="exportTransactions()">
+            📥 Export
+          </button>
+        </div>
+        
+        <div class="transaction-list" id="transactionsList">
+          <!-- Transactions will be loaded here -->
+        </div>
+        
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden" style="text-align: center; padding: 2rem;">
+          <div style="font-size: 3rem; margin-bottom: 0.5rem;">📭</div>
+          <p class="text-muted">No transactions found</p>
+        </div>
+      </div>
+    </div>
+    
+    <div id="bottomNav"></div>
+  </div>
+  
+  <script src="js/mock-data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Check login
+    if (!localStorage.getItem('isLoggedIn')) {
+      window.location.href = 'login.html';
+    }
+    
+    let currentTypeFilter = 'all';
+    let currentStatusFilter = 'all';
+    
+    // Load transactions
+    function loadTransactions() {
+      let filtered = user.transactions;
+      
+      // Filter by type
+      if (currentTypeFilter !== 'all') {
+        filtered = filtered.filter(tx => tx.type === currentTypeFilter);
+      }
+      
+      // Filter by status
+      if (currentStatusFilter !== 'all') {
+        filtered = filtered.filter(tx => tx.status === currentStatusFilter);
+      }
+      
+      const list = document.getElementById('transactionsList');
+      const emptyState = document.getElementById('emptyState');
+      
+      if (filtered.length === 0) {
+        list.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      
+      list.classList.remove('hidden');
+      emptyState.classList.add('hidden');
+      list.innerHTML = filtered.map(tx => createTransactionItem(tx)).join('');
+      
+      // Update summary
+      updateSummary();
+    }
+    
+    // Update summary
+    function updateSummary() {
+      const total = user.transactions.length;
+      const completed = user.transactions.filter(tx => tx.status === 'Completed').length;
+      const pending = user.transactions.filter(tx => tx.status === 'Pending').length;
+      
+      document.getElementById('totalCount').textContent = total;
+      document.getElementById('completedCount').textContent = completed;
+      document.getElementById('pendingCount').textContent = pending;
+    }
+    
+    // Filter by type
+    function filterByType(type) {
+      currentTypeFilter = type;
+      
+      // Update active button
+      document.querySelectorAll('.filter-btn[data-type]').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.type === type) {
+          btn.classList.add('active');
+        }
+      });
+      
+      loadTransactions();
+    }
+    
+    // Filter by status
+    function filterByStatus(status) {
+      currentStatusFilter = status;
+      
+      // Update active button
+      document.querySelectorAll('.filter-btn[data-status]').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.status === status) {
+          btn.classList.add('active');
+        }
+      });
+      
+      loadTransactions();
+    }
+    
+    // Export transactions
+    function exportTransactions() {
+      showAlert('Transactions exported to CSV!', 'success');
+    }
+    
+    // Transaction details modal
+    window.showTransactionDetails = function(id) {
+      const transaction = user.transactions.find(tx => tx.id === id);
+      if (!transaction) return;
+      
+      const isPositive = transaction.type === 'Receive';
+      
+      const content = `
+        <div style="text-align: center;">
+          <div class="transaction-icon ${transaction.type.toLowerCase()}" style="width: 60px; height: 60px; font-size: 2rem; margin: 0 auto 1rem;">
+            ${getTransactionIcon(transaction.type)}
+          </div>
+          <h3>${transaction.type}</h3>
+          <div style="font-size: 2rem; font-weight: 700; color: ${isPositive ? 'var(--success)' : 'var(--error)'}; margin: 1rem 0;">
+            ${isPositive ? '+' : '-'}${formatCurrency(transaction.amount, transaction.currency)}
+          </div>
+          
+          <div class="card" style="text-align: left; margin-top: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #F1F5F9;">
+              <span class="text-muted">Transaction ID:</span>
+              <span class="font-semibold text-sm">TXN-${transaction.id}-${Date.now().toString().slice(-6)}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #F1F5F9;">
+              <span class="text-muted">Status:</span>
+              <span class="transaction-status ${transaction.status.toLowerCase()}">${transaction.status}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #F1F5F9;">
+              <span class="text-muted">Date:</span>
+              <span class="font-semibold">${formatDate(transaction.date)}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #F1F5F9;">
+              <span class="text-muted">Time:</span>
+              <span class="font-semibold">${new Date(transaction.date).toLocaleTimeString()}</span>
+            </div>
+            ${transaction.recipient ? `
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #F1F5F9;">
+                <span class="text-muted">Recipient:</span>
+                <span class="font-semibold">${transaction.recipient}</span>
+              </div>
+            ` : ''}
+            ${transaction.sender ? `
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #F1F5F9;">
+                <span class="text-muted">Sender:</span>
+                <span class="font-semibold">${transaction.sender}</span>
+              </div>
+            ` : ''}
+            ${transaction.from && transaction.to ? `
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #F1F5F9;">
+                <span class="text-muted">Conversion:</span>
+                <span class="font-semibold">${transaction.from} → ${transaction.to}</span>
+              </div>
+            ` : ''}
+            <div style="display: flex; justify-content: space-between;">
+              <span class="text-muted">Description:</span>
+              <span class="font-semibold">${transaction.description}</span>
+            </div>
+          </div>
+          
+          ${transaction.status === 'Completed' ? `
+            <button class="btn btn-outline btn-block mt-md" onclick="downloadReceipt(${transaction.id})">
+              📥 Download Receipt
+            </button>
+          ` : ''}
+        </div>
+      `;
+      
+      showModal('Transaction Details', content, [
+        { text: 'Close', class: 'btn btn-outline' }
+      ]);
+    };
+    
+    // Download receipt
+    window.downloadReceipt = function(id) {
+      closeModal();
+      showAlert('Receipt downloaded!', 'success');
+    };
+    
+    // Initialize
+    loadTransactions();
+    
+    // Load bottom nav
+    document.getElementById('bottomNav').innerHTML = createBottomNav('transactions');
+  </script>
+</body>
+</html>
