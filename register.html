@@ -4,76 +4,151 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create Account - MonieKing</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   
   <div class="auth-page">
-    <div class="auth-card slide-up">
-      <div class="auth-logo">
-        <h1 class="auth-title">💰 MonieKing</h1>
-        <p class="auth-subtitle">Create your account and start banking globally.</p>
+    <!-- Animated Background -->
+    <div class="auth-bg-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+    
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" id="darkModeToggle" title="Toggle Dark Mode">
+      <span class="sun-icon">☀️</span>
+      <span class="moon-icon hidden">🌙</span>
+    </button>
+    
+    <div class="auth-container">
+      <!-- Left Side - Registration Form -->
+      <div class="auth-form-side">
+        <div class="auth-card">
+          <div class="auth-header">
+            <h1 class="auth-title">Join MonieKing!</h1>
+            <p class="auth-subtitle">Create your account and start banking globally</p>
+          </div>
+          
+          <form class="auth-form" id="registerForm">
+            <div class="form-group">
+              <label class="form-label">Full Name</label>
+              <div class="input-with-icon">
+                <span class="input-icon-left">👤</span>
+                <input 
+                  type="text" 
+                  class="form-input form-input-animated" 
+                  placeholder="Enter your full name" 
+                  required
+                  id="fullName"
+                >
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <div class="input-with-icon">
+                <span class="input-icon-left">📧</span>
+                <input 
+                  type="email" 
+                  class="form-input form-input-animated" 
+                  placeholder="Enter your email" 
+                  required
+                  id="email"
+                >
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <div class="input-with-icon">
+                <span class="input-icon-left">📱</span>
+                <input 
+                  type="tel" 
+                  class="form-input form-input-animated" 
+                  placeholder="+234 xxx xxxx xxx" 
+                  required
+                  id="phone"
+                >
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Password</label>
+              <div class="input-with-icon">
+                <span class="input-icon-left">🔒</span>
+                <input 
+                  type="password" 
+                  class="form-input form-input-animated" 
+                  placeholder="Create a strong password" 
+                  required
+                  id="password"
+                  minlength="8"
+                >
+                <button type="button" class="input-icon-right" id="togglePassword">
+                  👁️
+                </button>
+              </div>
+              <div class="password-strength" id="passwordStrength">
+                <div class="strength-bar">
+                  <div class="strength-fill"></div>
+                </div>
+                <span class="strength-text"></span>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-checkbox checkbox-animated">
+                <input type="checkbox" required id="terms">
+                <span class="checkbox-custom"></span>
+                <span>I agree to the Terms and Conditions</span>
+              </label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-block btn-lg btn-animated">
+              <span>Create Account</span>
+              <span class="btn-loader hidden"></span>
+            </button>
+            
+            <div class="divider">
+              <span>OR</span>
+            </div>
+            
+            <button type="button" class="btn btn-outline btn-block social-btn">
+              <img src="https://www.google.com/favicon.ico" alt="Google" class="social-icon">
+              <span>Sign up with Google</span>
+            </button>
+          </form>
+          
+          <div class="auth-link">
+            Already have an account? <a href="login.html">Login</a>
+          </div>
+        </div>
       </div>
       
-      <form class="auth-form" id="registerForm">
-        <div class="form-group">
-          <label class="form-label">Full Name</label>
-          <input 
-            type="text" 
-            class="form-input" 
-            placeholder="Enter your full name" 
-            required
-            id="fullName"
-          >
+      <!-- Right Side - Branding -->
+      <div class="auth-branding">
+        <div class="branding-content">
+          <img src="images/logo.jpg" alt="MonieKing" class="auth-logo-img">
+          <div class="branding-slogan" id="authSlogan"></div>
+          <div class="branding-stats">
+            <div class="stat-item">
+              <div class="stat-number">100K+</div>
+              <div class="stat-label">Active Users</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">150+</div>
+              <div class="stat-label">Countries</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">$5B+</div>
+              <div class="stat-label">Transferred</div>
+            </div>
+          </div>
         </div>
-        
-        <div class="form-group">
-          <label class="form-label">Email Address</label>
-          <input 
-            type="email" 
-            class="form-input" 
-            placeholder="Enter your email" 
-            required
-            id="email"
-          >
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">Phone Number</label>
-          <input 
-            type="tel" 
-            class="form-input" 
-            placeholder="+234 xxx xxxx xxx" 
-            required
-            id="phone"
-          >
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">Password</label>
-          <input 
-            type="password" 
-            class="form-input" 
-            placeholder="Create a strong password" 
-            required
-            id="password"
-            minlength="8"
-          >
-        </div>
-        
-        <div class="form-group">
-          <label class="form-checkbox">
-            <input type="checkbox" required id="terms">
-            <span>I agree to the Terms and Conditions</span>
-          </label>
-        </div>
-        
-        <button type="submit" class="btn btn-primary btn-block btn-lg">Create Account</button>
-      </form>
-      
-      <div class="auth-link">
-        Already have an account? <a href="login.html">Login</a>
       </div>
     </div>
   </div>
@@ -81,6 +156,115 @@
   <script src="js/components.js"></script>
   <script src="js/app.js"></script>
   <script>
+    // Dark Mode Toggle
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+    const sunIcon = darkModeToggle.querySelector('.sun-icon');
+    const moonIcon = darkModeToggle.querySelector('.moon-icon');
+    
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      body.classList.add('dark-mode');
+      sunIcon.classList.add('hidden');
+      moonIcon.classList.remove('hidden');
+    }
+    
+    darkModeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      
+      if (body.classList.contains('dark-mode')) {
+        localStorage.setItem('darkMode', 'enabled');
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+      } else {
+        localStorage.setItem('darkMode', 'disabled');
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+      }
+    });
+    
+    // Typing animation
+    const slogans = [
+      "Your Payment Gateway...",
+      "The Global Money Power App...",
+      "Banking Made Simple..."
+    ];
+    
+    let currentIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    const sloganElement = document.getElementById('authSlogan');
+    
+    function type() {
+      const currentSlogan = slogans[currentIndex];
+      
+      if (isDeleting) {
+        sloganElement.textContent = currentSlogan.substring(0, charIndex - 1);
+        charIndex--;
+      } else {
+        sloganElement.textContent = currentSlogan.substring(0, charIndex + 1);
+        charIndex++;
+      }
+      
+      let typeSpeed = isDeleting ? 50 : 80;
+      
+      if (!isDeleting && charIndex === currentSlogan.length) {
+        typeSpeed = 2000;
+        isDeleting = true;
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        currentIndex = (currentIndex + 1) % slogans.length;
+        typeSpeed = 500;
+      }
+      
+      setTimeout(type, typeSpeed);
+    }
+    
+    type();
+    
+    // Password Toggle
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    
+    togglePassword.addEventListener('click', function() {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      this.textContent = type === 'password' ? '👁️' : '🙈';
+    });
+    
+    // Password Strength Indicator
+    passwordInput.addEventListener('input', function() {
+      const password = this.value;
+      const strengthBar = document.querySelector('.strength-fill');
+      const strengthText = document.querySelector('.strength-text');
+      
+      let strength = 0;
+      if (password.length >= 8) strength += 25;
+      if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength += 25;
+      if (password.match(/[0-9]/)) strength += 25;
+      if (password.match(/[^a-zA-Z0-9]/)) strength += 25;
+      
+      strengthBar.style.width = strength + '%';
+      
+      if (strength <= 25) {
+        strengthBar.style.background = '#EF4444';
+        strengthText.textContent = 'Weak';
+        strengthText.style.color = '#EF4444';
+      } else if (strength <= 50) {
+        strengthBar.style.background = '#F59E0B';
+        strengthText.textContent = 'Fair';
+        strengthText.style.color = '#F59E0B';
+      } else if (strength <= 75) {
+        strengthBar.style.background = '#10B981';
+        strengthText.textContent = 'Good';
+        strengthText.style.color = '#10B981';
+      } else {
+        strengthBar.style.background = '#0057FF';
+        strengthText.textContent = 'Strong';
+        strengthText.style.color = '#0057FF';
+      }
+    });
+    
+    // Form Submission
     document.getElementById('registerForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
@@ -105,16 +289,40 @@
         return;
       }
       
-      // Simulate registration
-      showLoader();
+      // Animate button
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const btnText = submitBtn.querySelector('span:first-child');
+      const btnLoader = submitBtn.querySelector('.btn-loader');
+      
+      submitBtn.disabled = true;
+      btnText.classList.add('hidden');
+      btnLoader.classList.remove('hidden');
       
       setTimeout(() => {
-        hideLoader();
         localStorage.setItem('userName', fullName);
         localStorage.setItem('userEmail', email);
         localStorage.setItem('userPhone', phone);
-        window.location.href = 'kyc.html';
+        
+        btnLoader.classList.add('hidden');
+        btnText.textContent = '✓ Account Created!';
+        btnText.classList.remove('hidden');
+        submitBtn.classList.add('btn-success');
+        
+        setTimeout(() => {
+          window.location.href = 'kyc.html';
+        }, 800);
       }, 1500);
+    });
+    
+    // Input Focus Animations
+    document.querySelectorAll('.form-input-animated').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.parentElement.classList.add('input-focused');
+      });
+      
+      input.addEventListener('blur', function() {
+        this.parentElement.parentElement.classList.remove('input-focused');
+      });
     });
   </script>
 </body>

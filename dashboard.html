@@ -4,24 +4,70 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - MonieKing</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   
+  <!-- App Header with Logo, Slogan & Profile -->
+  <header class="app-header">
+    <div class="logo-area">
+      <img src="images/image.png" alt="MonieKing" class="app-logo-img">
+    </div>
+    <div class="slogan-area">
+      <div class="slogan-text" id="headerSlogan"></div>
+    </div>
+    <div class="profile-area" onclick="window.location.href='settings.html'">
+      <div class="profile-avatar" id="profileAvatar">W</div>
+      <div class="profile-info">
+        <div class="profile-name" id="profileName">Wisdom</div>
+        <div class="profile-status">
+          <span class="status-dot"></span>
+          <span>Active</span>
+        </div>
+      </div>
+    </div>
+  </header>
+  
+  
   <div class="page">
     <div class="page-header">
-      <div class="header-greeting">Welcome, <span id="userName">User</span> 👋</div>
+      <div class="header-greeting">Welcome back, <span id="userName">User</span>! 👋</div>
       <div class="header-subtitle">Here's your financial overview</div>
     </div>
     
     <div class="page-content">
-      <!-- Balance Card -->
-      <div class="balance-card">
-        <div class="balance-label">Total Balance (USD Equivalent)</div>
-        <div class="balance-amount" id="totalBalance">$0.00</div>
-        <div class="balance-change">
-          <span style="color: rgba(255,255,255,0.9);">↑ +2.5% from last month</span>
+      <!-- Virtual Debit Card -->
+      <div class="card-scene" id="cardScene">
+        <div class="virtual-card" id="virtualCard">
+          <div class="card-front">
+            <div class="card-chip">💳</div>
+            <div class="card-logo">MonieKing</div>
+            <div class="card-number" id="cardNumber">**** **** **** 7890</div>
+            <div class="card-details">
+              <div class="card-holder">
+                <div class="card-label">Card Holder</div>
+                <div class="card-value" id="cardHolderName">WISDOM OKECHUKWU</div>
+              </div>
+              <div class="card-expiry">
+                <div class="card-label">Expires</div>
+                <div class="card-value">12/28</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-back">
+            <div class="card-stripe"></div>
+            <div class="card-balance-container">
+              <div class="card-balance-label">Total Balance</div>
+              <div class="card-balance-amount" id="cardBalance">$0.00</div>
+              <div class="card-balance-hint">Tap to hide balance</div>
+            </div>
+            <div class="card-cvv">
+              <div class="card-label">CVV</div>
+              <div class="card-value">***</div>
+            </div>
+          </div>
         </div>
       </div>
       
@@ -86,12 +132,110 @@
       window.location.href = 'login.html';
     }
     
+    // Initialize header slogan typing
+    initHeaderSloganTyping();
+    
     // Load user data
     const userName = localStorage.getItem('userName') || user.name;
+    const userInitial = userName.charAt(0).toUpperCase();
+    
     document.getElementById('userName').textContent = userName.split(' ')[0];
+    document.getElementById('profileName').textContent = userName.split(' ')[0];
+    document.getElementById('profileAvatar').textContent = userInitial;
     
     // Load total balance
-    document.getElementById('totalBalance').textContent = formatCurrency(user.totalBalanceUSD, 'USD');
+    const totalBalance = user.totalBalanceUSD;
+    document.getElementById('cardBalance').textContent = formatCurrency(totalBalance, 'USD');
+    
+    // Set card holder name
+    document.getElementById('cardHolderName').textContent = userName.toUpperCase();
+    
+    // ===== 3D CARD ANIMATION =====
+    const cardScene = document.getElementById('cardScene');
+    const virtualCard = document.getElementById('virtualCard');
+    let isFlipped = false;
+    let autoFlipTimer = null;
+    let hasManuallyFlipped = false;
+    let isHovering = false;
+    
+    // Card theme variations
+    const cardThemes = [
+      'glass', 'gradient', 'metallic', 'neon', 'pastel', 
+      'carbon', 'royal', 'emerald', 'sunset', 'whitegold'
+    ];
+    
+    // Assign random theme (or get from localStorage)
+    let userTheme = localStorage.getItem('cardTheme');
+    if (!userTheme) {
+      userTheme = cardThemes[Math.floor(Math.random() * cardThemes.length)];
+      localStorage.setItem('cardTheme', userTheme);
+    }
+    virtualCard.classList.add(userTheme);
+    
+    // Click to flip card - FIXED for first time users
+    virtualCard.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      isFlipped = !isFlipped;
+      
+      if (isFlipped) {
+        virtualCard.classList.add('flipped');
+        virtualCard.style.transform = 'rotateY(180deg)';
+      } else {
+        virtualCard.classList.remove('flipped');
+        virtualCard.style.transform = 'rotateY(0deg)';
+      }
+      
+      hasManuallyFlipped = true;
+      clearTimeout(autoFlipTimer);
+    });
+    
+    // Desktop: 3D tilt effect on hover
+    if (window.innerWidth > 768) {
+      cardScene.addEventListener('mouseenter', function() {
+        isHovering = true;
+      });
+      
+      cardScene.addEventListener('mousemove', function(e) {
+        if (!isFlipped && isHovering) {
+          const rect = cardScene.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          
+          const rotateX = ((y - centerY) / 10);
+          const rotateY = ((centerX - x) / 10);
+          
+          virtualCard.style.transform = `perspective(1000px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg)`;
+        }
+      });
+      
+      cardScene.addEventListener('mouseleave', function() {
+        isHovering = false;
+        if (!isFlipped) {
+          virtualCard.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+        }
+      });
+    }
+    
+    // Auto-flip every 10 seconds (only if user hasn't manually flipped)
+    function startAutoFlip() {
+      if (!hasManuallyFlipped) {
+        autoFlipTimer = setTimeout(() => {
+          virtualCard.classList.add('flipped');
+          virtualCard.style.transform = 'rotateY(180deg)';
+          setTimeout(() => {
+            virtualCard.classList.remove('flipped');
+            virtualCard.style.transform = 'rotateY(0deg)';
+            startAutoFlip();
+          }, 3000);
+        }, 10000);
+      }
+    }
+    
+    startAutoFlip();
     
     // Load wallets
     const walletGrid = document.getElementById('walletGrid');

@@ -1,5 +1,59 @@
 // Reusable UI Components for MonieKing
 
+// App Header with Logo and Animated Slogan
+function createAppHeader(pageTitle = "") {
+  return `
+    <header class="app-header">
+      <div class="logo-area">
+        <div class="app-logo-icon">💰</div>
+        <div class="app-logo-text">MonieKing</div>
+      </div>
+      <div class="slogan-area">
+        <div class="slogan-text" id="headerSlogan"></div>
+      </div>
+    </header>
+  `;
+}
+
+// Initialize Header Slogan Typing Animation
+function initHeaderSloganTyping() {
+  const sloganElement = document.getElementById("headerSlogan");
+  if (!sloganElement) return;
+
+  const slogans = ["Your Payment Gateway...", "The Global Money Power App..."];
+
+  let currentIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+
+  function type() {
+    const currentSlogan = slogans[currentIndex];
+
+    if (isDeleting) {
+      sloganElement.textContent = currentSlogan.substring(0, charIndex - 1);
+      charIndex--;
+    } else {
+      sloganElement.textContent = currentSlogan.substring(0, charIndex + 1);
+      charIndex++;
+    }
+
+    let typeSpeed = isDeleting ? 50 : 80;
+
+    if (!isDeleting && charIndex === currentSlogan.length) {
+      typeSpeed = 2000;
+      isDeleting = true;
+    } else if (isDeleting && charIndex === 0) {
+      isDeleting = false;
+      currentIndex = (currentIndex + 1) % slogans.length;
+      typeSpeed = 500;
+    }
+
+    setTimeout(type, typeSpeed);
+  }
+
+  type();
+}
+
 // Modal Component
 function showModal(title, content, buttons = []) {
   const overlay = document.createElement("div");

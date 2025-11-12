@@ -4,10 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Send Money - MonieKing</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  
+  <!-- App Header with Logo & Slogan -->
+  <header class="app-header">
+    <div class="logo-area">
+      <div class="app-logo-icon">💰</div>
+      <div class="app-logo-text">MonieKing</div>
+    </div>
+    <div class="slogan-area">
+      <div class="slogan-text" id="headerSlogan"></div>
+    </div>
+  </header>
   
   <div class="page">
     <div class="page-header">
@@ -124,6 +136,9 @@
     if (!localStorage.getItem('isLoggedIn')) {
       window.location.href = 'login.html';
     }
+    
+    // Initialize header slogan typing
+    initHeaderSloganTyping();
     
     // Load wallets
     const sourceWallet = document.getElementById('sourceWallet');
