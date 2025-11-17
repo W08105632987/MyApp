@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MKoin Token - MonieKing</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  
+  <!-- MKoin Token Display -->
+  <div class="mkoin-display" onclick="window.location.href='dashboard.html'" title="Back to Dashboard">
+    <div class="mkoin-icon">M</div>
+    <div>
+      <div class="mkoin-balance" id="mkoinBalance">0.00</div>
+      <div class="mkoin-label">MKoin</div>
+    </div>
+  </div>
+  
+  <!-- Dark Mode Toggle -->
+  <button class="dark-mode-toggle" id="darkModeToggle" title="Toggle Dark Mode">
+    <span class="sun-icon">☀️</span>
+    <span class="moon-icon hidden">🌙</span>
+  </button>
+  
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="logo-area">
+      <img src="images/logo.png" alt="MonieKing" class="app-logo-img">
+    </div>
+    <div class="profile-area" onclick="window.location.href='settings.html'">
+      <div class="profile-avatar" id="profileAvatar">W</div>
+      <div class="profile-info">
+        <div class="profile-name" id="profileName">Wisdom</div>
+        <div class="profile-status">
+          <span class="status-dot"></span>
+          <span>Active</span>
+        </div>
+      </div>
+    </div>
+  </header>
+  
+  <div class="page mkoin-page">
+    <!-- Hero Section -->
+    <div class="mkoin-hero">
+      <div class="mkoin-hero-content">
+        <div class="mkoin-icon-large">M</div>
+        <h1 class="mkoin-title">MKoin Token</h1>
+        <p class="mkoin-subtitle">Earn rewards with every transaction on MonieKing</p>
+        <div class="mkoin-balance-display">
+          <span class="mkoin-balance-label">Your Balance</span>
+          <span class="mkoin-balance-value" id="mkoinBalanceHero">0.00 MKoin</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="page-content">
+      <!-- About MKoin -->
+      <div class="card mb-lg">
+        <h2 class="mb-md">What is MKoin?</h2>
+        <p class="mb-md">
+          MKoin is MonieKing's native reward token that you earn with every transaction you make on our platform. 
+          As a loyal user, you're automatically rewarded for your activity and trust in our ecosystem.
+        </p>
+        <div class="mkoin-features-grid">
+          <div class="mkoin-feature">
+            <div class="mkoin-feature-icon">🎁</div>
+            <h4>Earn Rewards</h4>
+            <p>Get MKoin for every transaction - send, receive, convert, or shop</p>
+          </div>
+          <div class="mkoin-feature">
+            <div class="mkoin-feature-icon">💎</div>
+            <h4>Future Value</h4>
+            <p>MKoin will be listed on exchanges, giving your tokens real market value</p>
+          </div>
+          <div class="mkoin-feature">
+            <div class="mkoin-feature-icon">🚀</div>
+            <h4>Early Adopter</h4>
+            <p>Start accumulating now before public listing</p>
+          </div>
+          <div class="mkoin-feature">
+            <div class="mkoin-feature-icon">🎯</div>
+            <h4>Exclusive Benefits</h4>
+            <p>Use MKoin for reduced fees and premium features</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- How to Earn -->
+      <div class="card mb-lg">
+        <h2 class="mb-md">How to Earn MKoin</h2>
+        <div class="earning-methods">
+          <div class="earning-item">
+            <div class="earning-icon">📤</div>
+            <div class="earning-content">
+              <h4>Send Money</h4>
+              <p>Earn 0.5 MKoin per transaction</p>
+            </div>
+            <div class="earning-reward">+0.5 MK</div>
+          </div>
+          <div class="earning-item">
+            <div class="earning-icon">📥</div>
+            <div class="earning-content">
+              <h4>Receive Money</h4>
+              <p>Earn 0.3 MKoin per transaction</p>
+            </div>
+            <div class="earning-reward">+0.3 MK</div>
+          </div>
+          <div class="earning-item">
+            <div class="earning-icon">🔄</div>
+            <div class="earning-content">
+              <h4>Convert Currency</h4>
+              <p>Earn 0.2 MKoin per conversion</p>
+            </div>
+            <div class="earning-reward">+0.2 MK</div>
+          </div>
+          <div class="earning-item">
+            <div class="earning-icon">🛍️</div>
+            <div class="earning-content">
+              <h4>Shop Products</h4>
+              <p>Earn 1.0 MKoin per purchase</p>
+            </div>
+            <div class="earning-reward">+1.0 MK</div>
+          </div>
+          <div class="earning-item">
+            <div class="earning-icon">👥</div>
+            <div class="earning-content">
+              <h4>Refer Friends</h4>
+              <p>Earn 10 MKoin per referral</p>
+            </div>
+            <div class="earning-reward">+10 MK</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Roadmap -->
+      <div class="card mb-lg">
+        <h2 class="mb-md">MKoin Roadmap</h2>
+        <div class="roadmap">
+          <div class="roadmap-item completed">
+            <div class="roadmap-marker">✓</div>
+            <div class="roadmap-content">
+              <h4>Q4 2024 - Token Launch</h4>
+              <p>MKoin rewards program initiated for all MonieKing users</p>
+              <span class="roadmap-status completed">Completed</span>
+            </div>
+          </div>
+          <div class="roadmap-item active">
+            <div class="roadmap-marker">⏳</div>
+            <div class="roadmap-content">
+              <h4>Q1 2025 - Community Building</h4>
+              <p>Expand user base and accumulate tokens. 100K+ users target</p>
+              <span class="roadmap-status active">In Progress</span>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-marker">📋</div>
+            <div class="roadmap-content">
+              <h4>Q2 2025 - Tokenomics Finalization</h4>
+              <p>Complete token distribution model and prepare for listing</p>
+              <span class="roadmap-status upcoming">Upcoming</span>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-marker">🚀</div>
+            <div class="roadmap-content">
+              <h4>Q3 2025 - Exchange Listing</h4>
+              <p>MKoin listed on major cryptocurrency exchanges</p>
+              <span class="roadmap-status upcoming">Upcoming</span>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-marker">💎</div>
+            <div class="roadmap-content">
+              <h4>Q4 2025 - Utility Expansion</h4>
+              <p>Use MKoin for fee reductions, premium features, and partnerships</p>
+              <span class="roadmap-status upcoming">Upcoming</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Token Stats -->
+      <div class="card mb-lg">
+        <h2 class="mb-md">Token Statistics</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value">1,000,000,000</div>
+            <div class="stat-label">Total Supply</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">500,000,000</div>
+            <div class="stat-label">Circulating Supply</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">50%</div>
+            <div class="stat-label">User Rewards</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">Q3 2025</div>
+            <div class="stat-label">Listing Date</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- CTA -->
+      <div class="card mkoin-cta">
+        <h2 class="mb-md">Start Earning Today!</h2>
+        <p class="mb-lg">The more you transact, the more MKoin you accumulate. Be an early holder and benefit from future value appreciation.</p>
+        <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
+          <a href="send-money.html" class="btn btn-primary">Send Money & Earn</a>
+          <a href="shop.html" class="btn btn-gold">Shop & Earn</a>
+          <a href="dashboard.html" class="btn btn-outline">Back to Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="bottomNav"></div>
+  
+  <script src="js/mock-data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Check login
+    if (!localStorage.getItem('isLoggedIn')) {
+      window.location.href = 'login.html';
+    }
+    
+    // Dark Mode
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+    const sunIcon = darkModeToggle.querySelector('.sun-icon');
+    const moonIcon = darkModeToggle.querySelector('.moon-icon');
+    
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      body.classList.add('dark-mode');
+      sunIcon.classList.add('hidden');
+      moonIcon.classList.remove('hidden');
+    }
+    
+    darkModeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      
+      if (body.classList.contains('dark-mode')) {
+        localStorage.setItem('darkMode', 'enabled');
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+      } else {
+        localStorage.setItem('darkMode', 'disabled');
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+      }
+    });
+    
+    // Load user data
+    const userName = localStorage.getItem('userName') || user.name;
+    const userInitial = userName.charAt(0).toUpperCase();
+    document.getElementById('profileName').textContent = userName.split(' ')[0];
+    document.getElementById('profileAvatar').textContent = userInitial;
+    
+    // Load MKoin balance
+    const mkoinBalance = parseFloat(localStorage.getItem('mkoinBalance') || '0');
+    document.getElementById('mkoinBalance').textContent = mkoinBalance.toFixed(2);
+    document.getElementById('mkoinBalanceHero').textContent = mkoinBalance.toFixed(2) + ' MKoin';
+    
+    // Load bottom nav
+    document.getElementById('bottomNav').innerHTML = createBottomNav('dashboard');
+  </script>
+</body>
+</html>

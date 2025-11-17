@@ -25,7 +25,20 @@
       font-family: 'Inter', sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       background-size: 400% 400%;
-      animation: gradientShift 15s ease infinite;
+      animation: gradientShift 8s ease infinite;
+      transition: background 1s ease;
+    }
+    
+    body.color-1 {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    body.color-2 {
+      background: linear-gradient(135deg, #0057FF 0%, #00d2ff 100%);
+    }
+    
+    body.color-3 {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     }
     
     @keyframes gradientShift {
@@ -62,61 +75,57 @@
     }
     
     .logo-circle {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(10px);
+      width: 150px;
+      height: 150px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
       display: flex;
       align-items: center;
       justify-content: center;
       margin: 0 auto 1.5rem;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
       animation: pulse 2s ease-in-out infinite;
+      padding: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
     }
     
     @keyframes pulse {
       0%, 100% {
         transform: scale(1);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
       }
       50% {
         transform: scale(1.05);
-        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
       }
     }
     
-    .logo-icon {
-      font-size: 4rem;
-      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-    }
-    
-    .brand-name {
-      font-size: 3rem;
-      font-weight: 800;
-      color: white;
-      text-align: center;
-      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      letter-spacing: -1px;
-      margin-bottom: 2rem;
+    .logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
     }
     
     .typing-container {
-      min-height: 60px;
+      min-height: 80px;
       display: flex;
       align-items: center;
       justify-content: center;
+      margin-bottom: 2rem;
     }
     
     .typing-text {
-      font-size: 1.5rem;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 0.95);
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.98);
       text-align: center;
-      min-height: 40px;
+      min-height: 50px;
       display: flex;
       align-items: center;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      text-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+      padding: 0 2rem;
     }
     
     .cursor {
@@ -136,10 +145,16 @@
     .skip-hint {
       position: absolute;
       bottom: 3rem;
-      font-size: 0.875rem;
-      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9375rem;
+      color: rgba(255, 255, 255, 0.85);
       text-align: center;
       animation: fadeIn 2s ease-in;
+      font-weight: 500;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
     @keyframes fadeIn {
@@ -160,66 +175,69 @@
     
     @media (max-width: 768px) {
       .logo-circle {
-        width: 100px;
-        height: 100px;
-      }
-      
-      .logo-icon {
-        font-size: 3rem;
-      }
-      
-      .brand-name {
-        font-size: 2.5rem;
+        width: 120px;
+        height: 120px;
+        padding: 15px;
       }
       
       .typing-text {
-        font-size: 1.25rem;
-        padding: 0 1rem;
+        font-size: 1.375rem;
+        padding: 0 1.5rem;
       }
       
       .skip-hint {
         bottom: 2rem;
-        padding: 0 1rem;
+        padding: 10px 20px;
+        font-size: 0.875rem;
       }
     }
   </style>
 </head>
-<body>
+<body class="color-1">
   <div class="splash-container" id="splashContainer">
     <div class="logo-wrapper">
       <div class="logo-circle">
-        <div class="logo-icon">💰</div>
+        <img src="images/MONIEKING-LOGO1.png" alt="MonieKing" class="logo-img">
       </div>
-      <h1 class="brand-name">MonieKing</h1>
     </div>
     
     <div class="typing-container">
       <div class="typing-text" id="typingText"></div>
     </div>
     
-    <div class="skip-hint">Tap anywhere to continue</div>
+    <div class="skip-hint">Tap anywhere to continue →</div>
   </div>
 
   <script>
     // Typing animation configuration
     const slogans = [
       "Your Payment Gateway...",
-      "The Global Money Power App..."
+      "The Global Money Power App...",
+      "Banking Made Simple..."
     ];
+    
+    const backgroundColors = ['color-1', 'color-2', 'color-3'];
     
     let currentSloganIndex = 0;
     let currentCharIndex = 0;
     let isTyping = true;
     let isDeleting = false;
-    let typingSpeed = 80;
-    let deletingSpeed = 50;
-    let pauseAfterTyping = 2000;
-    let pauseAfterDeleting = 500;
+    let typingSpeed = 100;
+    let deletingSpeed = 60;
+    let pauseAfterTyping = 2500;
+    let pauseAfterDeleting = 800;
     let autoRedirectTimer;
     let userInteracted = false;
+    let typingTimeout;
     
     const typingElement = document.getElementById('typingText');
     const splashContainer = document.getElementById('splashContainer');
+    const body = document.body;
+    
+    // Change background color for each slogan
+    function changeBackgroundColor() {
+      body.className = backgroundColors[currentSloganIndex];
+    }
     
     // Typing effect function
     function typeEffect() {
@@ -232,29 +250,30 @@
         if (currentCharIndex < currentSlogan.length) {
           typingElement.innerHTML = currentSlogan.substring(0, currentCharIndex + 1) + '<span class="cursor"></span>';
           currentCharIndex++;
-          setTimeout(typeEffect, typingSpeed);
+          typingTimeout = setTimeout(typeEffect, typingSpeed);
         } else {
           // Finished typing current slogan
           isTyping = false;
-          setTimeout(typeEffect, pauseAfterTyping);
+          typingTimeout = setTimeout(typeEffect, pauseAfterTyping);
         }
       } else if (isDeleting) {
         // Deleting backward
         if (currentCharIndex > 0) {
           typingElement.innerHTML = currentSlogan.substring(0, currentCharIndex - 1) + '<span class="cursor"></span>';
           currentCharIndex--;
-          setTimeout(typeEffect, deletingSpeed);
+          typingTimeout = setTimeout(typeEffect, deletingSpeed);
         } else {
           // Finished deleting
           isDeleting = false;
           isTyping = true;
           currentSloganIndex = (currentSloganIndex + 1) % slogans.length;
-          setTimeout(typeEffect, pauseAfterDeleting);
+          changeBackgroundColor(); // Change color when moving to next slogan
+          typingTimeout = setTimeout(typeEffect, pauseAfterDeleting);
         }
       } else {
         // Start deleting
         isDeleting = true;
-        setTimeout(typeEffect, deletingSpeed);
+        typingTimeout = setTimeout(typeEffect, deletingSpeed);
       }
     }
     
@@ -265,6 +284,7 @@
       
       // Clear any ongoing timers
       clearTimeout(autoRedirectTimer);
+      clearTimeout(typingTimeout);
       
       // Add fade out animation
       splashContainer.classList.add('fade-out');
@@ -280,8 +300,8 @@
       typeEffect();
     }, 500);
     
-    // Auto redirect after 5 seconds
-    autoRedirectTimer = setTimeout(redirectToLogin, 5000);
+    // Auto redirect after 12 seconds (time for all 3 slogans to show)
+    autoRedirectTimer = setTimeout(redirectToLogin, 12000);
     
     // Skip on click/tap anywhere
     splashContainer.addEventListener('click', redirectToLogin);

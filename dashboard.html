@@ -10,13 +10,28 @@
 </head>
 <body>
   
+  <!-- MKoin Token Display -->
+  <div class="mkoin-display" onclick="window.location.href='mkoin.html'" title="Your MKoin Balance">
+    <div class="mkoin-icon">M</div>
+    <div>
+      <div class="mkoin-balance" id="mkoinBalance">0.00</div>
+      <div class="mkoin-label">MKoin</div>
+    </div>
+  </div>
+  
+  <!-- Dark Mode Toggle -->
+  <button class="dark-mode-toggle" id="darkModeToggle" title="Toggle Dark Mode">
+    <span class="sun-icon">☀️</span>
+    <span class="moon-icon hidden">🌙</span>
+  </button>
+  
   <!-- App Header with Logo, Slogan & Profile -->
   <header class="app-header">
     <div class="logo-area">
-      <img src="images/image.png" alt="MonieKing" class="app-logo-img">
-    </div>
-    <div class="slogan-area">
-      <div class="slogan-text" id="headerSlogan"></div>
+      <img src="images/logo.png" alt="MonieKing" class="app-logo-img">
+      <div class="slogan-area-mobile">
+        <div class="slogan-text" id="headerSlogan"></div>
+      </div>
     </div>
     <div class="profile-area" onclick="window.location.href='settings.html'">
       <div class="profile-avatar" id="profileAvatar">W</div>
@@ -30,11 +45,10 @@
     </div>
   </header>
   
-  
   <div class="page">
-    <div class="page-header">
-      <div class="header-greeting">Welcome back, <span id="userName">User</span>! 👋</div>
-      <div class="header-subtitle">Here's your financial overview</div>
+    <div class="dashboard-welcome">
+      <h1 class="welcome-title">Welcome back, <span id="userName">User</span>! 👋</h1>
+      <p class="welcome-subtitle">Here's your financial overview</p>
     </div>
     
     <div class="page-content">
@@ -43,7 +57,7 @@
         <div class="virtual-card" id="virtualCard">
           <div class="card-front">
             <div class="card-chip">💳</div>
-            <div class="card-logo">MonieKing</div>
+            <img src="images/logo.png" alt="MonieKing" class="card-logo-img">
             <div class="card-number" id="cardNumber">**** **** **** 7890</div>
             <div class="card-details">
               <div class="card-holder">
@@ -57,7 +71,6 @@
             </div>
           </div>
           <div class="card-back">
-            <div class="card-stripe"></div>
             <div class="card-balance-container">
               <div class="card-balance-label">Total Balance</div>
               <div class="card-balance-amount" id="cardBalance">$0.00</div>
@@ -132,6 +145,33 @@
       window.location.href = 'login.html';
     }
     
+    // Dark Mode Toggle
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+    const sunIcon = darkModeToggle.querySelector('.sun-icon');
+    const moonIcon = darkModeToggle.querySelector('.moon-icon');
+    
+    // Check for saved dark mode preference
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      body.classList.add('dark-mode');
+      sunIcon.classList.add('hidden');
+      moonIcon.classList.remove('hidden');
+    }
+    
+    darkModeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      
+      if (body.classList.contains('dark-mode')) {
+        localStorage.setItem('darkMode', 'enabled');
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+      } else {
+        localStorage.setItem('darkMode', 'disabled');
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+      }
+    });
+    
     // Initialize header slogan typing
     initHeaderSloganTyping();
     
@@ -142,6 +182,10 @@
     document.getElementById('userName').textContent = userName.split(' ')[0];
     document.getElementById('profileName').textContent = userName.split(' ')[0];
     document.getElementById('profileAvatar').textContent = userInitial;
+    
+    // Load MKoin balance
+    const mkoinBalance = parseFloat(localStorage.getItem('mkoinBalance') || '0');
+    document.getElementById('mkoinBalance').textContent = mkoinBalance.toFixed(2);
     
     // Load total balance
     const totalBalance = user.totalBalanceUSD;
