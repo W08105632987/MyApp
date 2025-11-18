@@ -10,36 +10,39 @@
 </head>
 <body>
   
-  <!-- MKoin Token Display -->
-  <div class="mkoin-display" onclick="window.location.href='mkoin.html'" title="Your MKoin Balance">
-    <div class="mkoin-icon">M</div>
-    <div>
-      <div class="mkoin-balance" id="mkoinBalance">0.00</div>
-      <div class="mkoin-label">MKoin</div>
-    </div>
-  </div>
-  
-  <!-- Dark Mode Toggle -->
-  <button class="dark-mode-toggle" id="darkModeToggle" title="Toggle Dark Mode">
-    <span class="sun-icon">☀️</span>
-    <span class="moon-icon hidden">🌙</span>
-  </button>
-  
-  <!-- App Header with Logo, Slogan & Profile -->
+  <!-- App Header with Logo, Slogan, MKoin & Profile -->
   <header class="app-header">
     <div class="logo-area">
       <img src="images/logo.png" alt="MonieKing" class="app-logo-img">
-      <div class="slogan-area-mobile">
+      <div class="slogan-area-inline">
         <div class="slogan-text" id="headerSlogan"></div>
       </div>
     </div>
-    <div class="profile-area" onclick="window.location.href='settings.html'">
-      <div class="profile-avatar" id="profileAvatar">W</div>
-      <div class="profile-info">
-        <div class="profile-name" id="profileName">Wisdom</div>
-        <div class="profile-status">
-          <span class="status-dot"></span>
-          <span>Active</span>
+    <div class="header-right">
+      <!-- MKoin Display -->
+      <div class="mkoin-display-inline" onclick="window.location.href='mkoin.html'" title="Your MKoin Balance">
+        <div class="mkoin-icon-inline">M</div>
+        <div class="mkoin-info">
+          <div class="mkoin-balance-inline" id="mkoinBalance">0.00</div>
+          <div class="mkoin-label-inline">MKoin</div>
+        </div>
+      </div>
+      
+      <!-- Dark Mode Toggle -->
+      <button class="dark-mode-toggle-inline" id="darkModeToggle" title="Toggle Dark Mode">
+        <span class="sun-icon">☀️</span>
+        <span class="moon-icon hidden">🌙</span>
+      </button>
+      
+      <!-- Profile -->
+      <div class="profile-area" onclick="window.location.href='settings.html'">
+        <div class="profile-avatar" id="profileAvatar">W</div>
+        <div class="profile-info">
+          <div class="profile-name" id="profileName">Wisdom</div>
+          <div class="profile-status">
+            <span class="status-dot"></span>
+            <span>Active</span>
+          </div>
         </div>
       </div>
     </div>
