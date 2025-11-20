@@ -339,13 +339,15 @@ body.dark-mode .app-header {
 
 .slogan-text {
   font-size: 0.8125rem;
-  color: var(--text-dark);
+  color: #FFFFFF;
   font-weight: 600;
   font-style: italic;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 body.dark-mode .slogan-text {
-  color: var(--white);
+  color: #F1F5F9;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .header-right {
@@ -473,11 +475,11 @@ body.dark-mode .profile-area:hover {
 .profile-name {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--text-dark);
+  color: #2F4F4F;
 }
 
 body.dark-mode .profile-name {
-  color: var(--white);
+  color: #F1F5F9;
 }
 
 .profile-status {
@@ -613,6 +615,24 @@ body.dark-mode .profile-name {
 
   .welcome-subtitle {
     font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .mkoin-display-inline {
+    padding: 6px 12px;
+  }
+
+  .mkoin-info {
+    display: flex;
+  }
+
+  .mkoin-balance-inline {
+    font-size: 0.75rem;
+  }
+
+  .mkoin-label-inline {
+    font-size: 0.5rem;
   }
 }
 
@@ -767,10 +787,6 @@ body.dark-mode .profile-name {
     font-size: 0.875rem;
   }
 
-  .slogan-text {
-    font-size: 0.6875rem;
-  }
-
   .dashboard-welcome {
     padding: var(--spacing-md);
   }
@@ -781,6 +797,37 @@ body.dark-mode .profile-name {
 
   .welcome-subtitle {
     font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .slogan-text {
+    font-size: 0.625rem;
+    line-height: 1.2;
+  }
+}
+
+/* NEW ADDITION - Progressive smaller sizes for tiny screens */
+@media (max-width: 640px) {
+  .slogan-text {
+    font-size: 0.5625rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .slogan-text {
+    font-size: 0.5rem;
+    line-height: 1.1;
+  }
+
+  .logo-area {
+    max-width: 45%;
+  }
+}
+
+@media (max-width: 380px) {
+  .slogan-text {
+    font-size: 0.4375rem;
   }
 }
 
@@ -809,6 +856,8 @@ body.dark-mode .profile-name {
 /* =========================
    VIRTUAL DEBIT CARD (3D)
 ========================= */
+
+
 .card-scene {
   perspective: 1000px;
   width: 100%;
@@ -1268,18 +1317,19 @@ body.dark-mode .profile-name {
 .form-textarea {
   width: 100%;
   padding: 12px 16px;
-  border: 2px solid #E2E8F0;
+  border: none;
   border-radius: var(--radius-md);
   font-size: 1rem;
   background: var(--white);
   transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .form-input:focus,
 .form-select:focus,
 .form-textarea:focus {
-  border-color: var(--primary-blue);
-  box-shadow: 0 0 0 3px rgba(0, 87, 255, 0.1);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 87, 255, 0.2), 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .form-textarea {
@@ -1320,16 +1370,64 @@ body.dark-mode .profile-name {
    CARDS
 ========================= */
 .card {
-  background: var(--white);
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ebf0 100%);
+  background-image:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(232, 235, 240, 0.9) 100%),
+    repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0, 87, 255, 0.02) 10px, rgba(0, 87, 255, 0.02) 20px);
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
-  box-shadow: var(--shadow-md);
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.07),
+    0 1px 3px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
   transition: all 0.3s ease;
+  border: 1px solid rgba(0, 87, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
 .card:hover {
-  box-shadow: var(--shadow-lg);
+  box-shadow:
+    0 10px 15px rgba(0, 0, 0, 0.1),
+    0 4px 6px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
   transform: translateY(-2px);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+body.dark-mode .card {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  background-image:
+    linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%),
+    repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, 0.02) 10px, rgba(255, 255, 255, 0.02) 20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .card:hover {
+  box-shadow:
+    0 10px 15px rgba(0, 0, 0, 0.4),
+    0 4px 6px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .card-header {
@@ -1935,24 +2033,151 @@ body.dark-mode .profile-name {
 }
 
 @media (max-width: 768px) {
-  .mkoin-title {
+  .mkoin-hero {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .mkoin-icon-large {
+    width: 60px;
+    height: 60px;
     font-size: 2rem;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .mkoin-title {
+    font-size: 1.75rem;
+  }
+
+  .mkoin-subtitle {
+    font-size: 0.9375rem;
   }
 
   .mkoin-balance-value {
-    font-size: 1.5rem;
+    font-size: 1.375rem;
+  }
+
+  .mkoin-balance-display {
+    padding: var(--spacing-md);
   }
 
   .mkoin-features-grid {
     grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+
+  .mkoin-feature {
+    padding: var(--spacing-md);
+  }
+
+  .mkoin-feature-icon {
+    font-size: 2rem;
+  }
+
+  .mkoin-feature h4 {
+    font-size: 1rem;
+  }
+
+  .mkoin-feature p {
+    font-size: 0.8125rem;
+  }
+
+  .earning-item {
+    padding: var(--spacing-sm);
+    gap: var(--spacing-sm);
+  }
+
+  .earning-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    font-size: 1.25rem;
+  }
+
+  .earning-content h4 {
+    font-size: 0.9375rem;
+  }
+
+  .earning-content p {
+    font-size: 0.75rem;
+  }
+
+  .earning-reward {
+    font-size: 1.125rem;
   }
 
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+  }
+
+  .stat-card {
+    padding: var(--spacing-md);
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.8125rem;
   }
 
   .roadmap {
     padding-left: var(--spacing-sm);
+    gap: var(--spacing-md);
+  }
+
+  .roadmap-marker {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+  }
+
+  .roadmap-content h4 {
+    font-size: 1rem;
+  }
+
+  .roadmap-content p {
+    font-size: 0.8125rem;
+  }
+}
+
+/* NEW ADDITION - Extra small devices */
+@media (max-width: 480px) {
+  .mkoin-hero {
+    padding: var(--spacing-md);
+  }
+
+  .mkoin-title {
+    font-size: 1.5rem;
+  }
+
+  .mkoin-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .mkoin-icon-large {
+    width: 50px;
+    height: 50px;
+    font-size: 1.75rem;
+  }
+
+  .mkoin-balance-value {
+    font-size: 1.25rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .roadmap::before {
+    left: 13px;
+  }
+
+  .roadmap-marker {
+    width: 24px;
+    height: 24px;
+    font-size: 0.875rem;
   }
 }
 
@@ -2190,6 +2415,33 @@ body.dark-mode .profile-name {
 /* =========================
    DARK MODE
 ========================= */
+/* NEW ADDITION - Fix text visibility in dark mode */
+body.dark-mode .welcome-title,
+body.dark-mode .header-greeting,
+body.dark-mode .mkoin-title,
+body.dark-mode h1, 
+body.dark-mode h2, 
+body.dark-mode h3,
+body.dark-mode h4 {
+  color: #F1F5F9;
+}
+
+body.dark-mode .welcome-subtitle,
+body.dark-mode .header-subtitle,
+body.dark-mode .mkoin-subtitle {
+  color: #94A3B8;
+}
+
+body.dark-mode .transaction-type,
+body.dark-mode .wallet-balance,
+body.dark-mode .card-title {
+  color: #F1F5F9;
+}
+
+body.dark-mode .form-label {
+  color: #E2E8F0;
+}
+
 body.dark-mode {
   --background: #0F172A;
   --white: #1E293B;
@@ -2458,13 +2710,14 @@ body.dark-mode .auth-container {
 }
 
 .branding-slogan-container {
-  min-height: 60px;
+  height: 60px;
+  /* fixed height → no resizing */
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 2rem;
+  overflow: hidden;
 }
-
 .branding-slogan {
   font-size: 1.5rem;
   font-weight: 600;
@@ -2472,24 +2725,20 @@ body.dark-mode .auth-container {
 }
 
 .branding-features {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--spacing-md);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: var(--spacing-lg);
   margin-top: 3rem;
-}
-
-@media (min-width: 1024px) {
-  .branding-features {
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-lg);
-  }
 }
 
 .feature-item {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: var(--spacing-sm);
+  text-align: left;
+  gap: var(--spacing-md);
   padding: var(--spacing-md);
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
@@ -2498,7 +2747,6 @@ body.dark-mode .auth-container {
   opacity: 0;
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
-  text-align: center;
 }
 
 .feature-item:hover {
